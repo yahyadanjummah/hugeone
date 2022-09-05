@@ -22,7 +22,7 @@ require_once(plugin_dir_path(__FILE__).'/includes/weather-class.php');
 
 // Register widget
 function register_hugeone(){
-    register_widget('Youtube_Subs_Widget');
+    register_widget('Weather_Widget');
 }
 
 // Hook in function

@@ -1,8 +1,8 @@
 <?php
 /**
- * Adds Youtube_Subs widget.
+ * Adds Weather_Widget widget.
  */
-class Youtube_Subs_Widget extends WP_Widget {
+class Weather_Widget extends WP_Widget {
 
 	/**
 	 * Register widget with WordPress.
@@ -10,7 +10,7 @@ class Youtube_Subs_Widget extends WP_Widget {
 	function __construct() {
 		parent::__construct(
 			'hugeone_widget', // Base ID
-			esc_html__( 'YouTube Subs', 'yts_domain' ), // Name
+			esc_html__( 'Weather Widget', 'yts_domain' ), // Name
 			array( 'description' => esc_html__( 'widget to display huge_weather', 'yts_domain' ), ) // Args
 		);
 	}
@@ -24,11 +24,19 @@ class Youtube_Subs_Widget extends WP_Widget {
 	 * @param array $instance Saved values from database.
 	 */
 	public function widget( $args, $instance ) {
-		echo $args['before_widget'];
+		echo $args['before_widget']; // what ever you want to display
+
+
 		if ( ! empty( $instance['title'] ) ) {
-			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title'];
+			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args
+			['after_title'];
 		}
-		echo '<a class="weatherwidget-io" href="https://forecast7.com/en/40d71n74d01/new-york/" data-label_1="NEW YORK" data-label_2="WEATHER" data-theme="original" >NEW YORK WEATHER</a>';
+           // widget content output
+		   echo '<iframe src="https://www.meteoblue.com/en/weather/widget/daily/place_identification_2328926?geoloc=fixed&days=4&tempunit=CELSIUS&windunit=KILOMETER_PER_HOUR&precipunit=MILLIMETER&coloured=coloured&pictoicon=0&pictoicon=1&maxtemperature=0&maxtemperature=1&mintemperature=0&mintemperature=1&windspeed=0&windspeed=1&windgust=0&winddirection=0&winddirection=1&uv=0&humidity=0&precipitation=0&precipitation=1&precipitationprobability=0&precipitationprobability=1&spot=0&pressure=0&layout=light"  frameborder="0" scrolling="NO" allowtransparency="true" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox"
+			      style="width: 216px; height: 420px"></iframe>
+			      <div><a href="https://www.meteoblue.com/en/weather/week/place_identification?utm_source=weather_widget&utm_medium=linkus&utm_content=daily&utm_campaign=Weather%2BWidget" target="_blank" rel="noopener">
+				  </a></div>';
+
 		echo $args['after_widget'];
 	}
 
@@ -41,7 +49,11 @@ class Youtube_Subs_Widget extends WP_Widget {
 	 */
 	public function form( $instance ) {
 		$title = ! empty( $instance['title'] ) ? $instance['title'] : esc_html__( 'weather', 'yts_domain' );
+		
+		$places = ! empty( $instance['places'] ) ? $instance['places'] : esc_html__( 'Huge_one_weather', 'yts_domain' );
 		?>
+
+        <!-- Title -->
 		<p>
 		  <label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>">
             <?php esc_attr_e( 'Title:', 'yts_domain' ); ?>
@@ -51,6 +63,18 @@ class Youtube_Subs_Widget extends WP_Widget {
          name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>"
          type="text"
          value="<?php echo esc_attr( $title ); ?>">
+		</p>
+        
+		 <!-- Places -->
+		<p>
+		  <label for="<?php echo esc_attr( $this->get_field_id( 'places' ) ); ?>">
+            <?php esc_attr_e( 'places:', 'yts_domain' ); ?>
+          </label> 
+		<input class="widefat"
+         id="<?php echo esc_attr( $this->get_field_id( 'places' ) ); ?>" 
+         name="<?php echo esc_attr( $this->get_field_name( 'places' ) ); ?>"
+         type="text"
+         value="<?php echo esc_attr( $places ); ?>">
 		</p>
 		<?php 
 	}
@@ -65,11 +89,15 @@ class Youtube_Subs_Widget extends WP_Widget {
 	 *
 	 * @return array Updated safe values to be saved.
 	 */
+	 
 	public function update( $new_instance, $old_instance ) {
 		$instance = array();
+
 		$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? sanitize_text_field( $new_instance['title'] ) : '';
+		$instance['places'] = ( ! empty( $new_instance['places'] ) ) ? sanitize_text_field( $new_instance['places'] ) : '';
 
 		return $instance;
+	
 	}
 
 } // class Foo_Widget
